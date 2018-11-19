@@ -5,7 +5,7 @@ var app = getApp();
 
 Page({
   data: {
-    openid:'',
+  
     img_url:'',
     task: {
       name: '',
@@ -27,7 +27,7 @@ Page({
         'sunday': 0
       }
     },
-    openId: '',
+    openid: '',
     userInfo: {},
     creating: false,
     button: {
@@ -36,7 +36,14 @@ Page({
     modalHidden: true
   },
 
-  
+  onLoad: function (options) {
+    if (app.globalData.openid) {
+      this.setData({
+        openid: app.globalData.openid
+      })
+      console.log(app.globalData)
+    }
+  },
 
   // 设置物品名称
   bindKeyInput: function (e) {
@@ -122,7 +129,6 @@ Page({
       data: {
         price: this.data.task.price,  //价格
         name: this.data.task.name,     // //物品名字
-        openid: this.data.openid,       //openID
         introdution: this.data.task.introdution,   //物品介绍
         address: this.data.task.address,    //地址
         address1: this.data.task.address1, //详情地址
@@ -134,7 +140,7 @@ Page({
         this.setData({
           counterId: res._id,
           count: 11324646,
-          openid: this.data.openid,
+    
           price: 104569815
         })
         wx.showToast({
