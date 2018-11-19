@@ -1,0 +1,23 @@
+<view  class='container'>
+  <swiper class='kuang' vertical='{{false}}' indicator-dots='true' autoplay='true' interval='4000'>
+    <swiper-item>
+      <image class="kuang-img" mode="scaleToFill" catchtap='onSwiperItemTap' data-postId="3" src='/images/index/school5.jpg'></image>
+    </swiper-item>
+    <swiper-item>
+      <image class='kuang-img' mode='scaleToFill' catchtap='onSwiperItemTap' data-postId='4' src='/images/index/school4.jpg'></image>
+    </swiper-item>
+    <swiper-item>
+      <image class='kuang-img' mode='scaleToFill' catchtap='onSwiperItemTap' data-postId='5' src='/images/index/school7.jpg'></image>
+    </swiper-item>
+  </swiper>
+
+		<swiper class="section icons" indicator-dots="true" autoplay="" interval="" duration="500">
+			<swiper-item wx:for="{{icons}}" wx:for-item="list" wx:key="id">
+				<view class="icon" wx:for="{{list}}" wx:for-item="icon" wx:key="id" bindtap="toNearby">
+					<image src="{{icon.img}}"/>
+					<text>{{icon.name}}</text>
+				</view>
+			</swiper-item>
+		</swiper>
+
+</view>
