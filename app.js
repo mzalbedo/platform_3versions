@@ -11,8 +11,10 @@ App({
       }
 
       this.globalData = {}
-    
+  
   },
+
+
 
   getUserInfo: function (cb) {
     var that = this
