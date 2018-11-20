@@ -1,20 +1,23 @@
-
+import {
+  random
+} from '../../util/common.js'
 
 var util = require('../../util/util.js');
 var app = getApp();
 
 Page({
   data: {
-  
-    img_url:'',
+
+    img_url: '',
+    img_name: '',
     task: {
-      goods_name:'',
-      introdution:'',
-      fileid: '点击选择地点',
-      createdAT:'2016-11-00',
-      updatedAT:'2016-11-00',
-      price:'',
-      ACL:'',
+      goods_name: '',
+      introdution: '',
+      fileid: '',
+      createdAT: '2016-11-00',
+      updatedAT: '2016-11-00',
+      price: Number,
+      ACL: 0,
       repeat: {
         'monday': 1,
         'tuesday': 1,
@@ -56,8 +59,7 @@ Page({
     });
   },
   //物品价格
-  bindKeyInputPrice:function(e)
-  {
+  bindKeyInputPrice: function (e) {
     this.setData({
       'task.price': e.detail.value
     })
@@ -114,28 +116,23 @@ Page({
       modalHidden: true
     })
   },
-  // add database data
+  // 添加数据
   onAdd: function () {
-    var data=new Date();
+    var data = new Date();
     const db = wx.cloud.database()
-    db.collection('username').add({
+    db.collection('goods_table').add({
       data: {
-        price: this.data.task.price,  //价格
-        name: this.data.task.name,     // //物品名字
-        introdution: this.data.task.introdution,   //物品介绍
-        address: this.data.task.address,    //地址
-        address1: this.data.task.address1, //详情地址
-        nickName:this.data.userInfo.nickName,  //用户名字
-        date: data,                    //时间
+        goods_name: this.data.task.goods_name,        //物品名称
+        introdution: this.data.task.introdution,      //物品介绍
+        fileid: this.data.task.fileid,                //物品照片
+        createdAT: this.data.task.createdAT,          //发布时间
+        updatedAT: this.data.task.updatedAT,          //更新时间
+        price: this.data.task.price,                  //物品价格
+        ACL: this.data.task.ACL,                      //物品状态
       },
       success: res => {
+        wx.hideToast();
         // 在返回结果中会包含新创建的记录的 _id
-        this.setData({
-          counterId: res._id,
-          count: 11324646,
-    
-          price: 104569815
-        })
         wx.showToast({
           title: '新增记录成功',
         })
@@ -151,67 +148,13 @@ Page({
     })
   },
 
-  // 创建任务
-  createTask: function () {
-    var that = this;
-    var task = this.data.task;
-    var openId = this.data.openId;
-    var userInfo = this.data.userInfo;
-    console.log(this.data)
-    wx.showToast({
-      title: '新建中',
-      icon: 'loading',
-      duration: 10000
-    });
-
-    this.onAdd();
-
-
-        wx.hideToast();
-        wx.navigateTo({
-          url: '/pages/my/my',
-          success: function (res) {
-            // success
-          },
-          fail: function () {
-            // fail
-          },
-          complete: function () {
-            // complete
-          }
-        })
-     
-      
-  },
-
-  uploadImg:function()
-{
-    // new AV.initialize();
-    console.log("测试上传代码运行")
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-      success: data => {
-        const tempFilePath = data.tempFilePaths[0];
-        console.log(tempFilePath)
-      
-        this.setData({
-          img_url: data.tempFilePaths[0]
-        })
-
-
-      },
-    })
-},
-
   // 提交、检验
   bindSubmit: function (e) {
     var that = this;
     var task = this.data.task;
     var creating = this.data.creating;
-  // console.log(this.data);
-    if (task.name == '' || task.address == '点击选择地点') {
+    // console.log(this.data);
+    if (task.name == '' || task.introdution == '' || !task.price) {
       this.setData({
         modalHidden: false
       });
@@ -225,6 +168,85 @@ Page({
     }
   },
 
+
+  // 创建任务
+  createTask: function () {
+    var that = this;
+    var task = this.data.task;
+    wx.showToast({
+      title: '新建中',
+      icon: 'loading',
+      duration: 10000
+    });
+    this._getUpimage()
+      .then(res => {
+        this.setData({
+          'task.fileid': res
+        })
+        //this.uploadImg()
+        this.onAdd();
+      })
+  },
+
+  //获取本地图片信息
+  uploadImg: function () {
+    // console.log("测试上传代码运行")
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: res => {
+        const tempFilePath = res.tempFilePaths[0]
+        console.log('cloudPath')
+        const cloudPath = 'goods/' + random(17) + tempFilePath.match(/\.[^.]+?$/)[0]
+        console.log(cloudPath)
+        this.setData({
+          img_url: res.tempFilePaths[0],
+          img_name: cloudPath
+        })
+      },
+    })
+  },
+
+  //上传获取图片ID
+  _getUpimage() {
+    return new Promise((resolve, reject) => {
+      this.upImage(resolve, reject)
+    })
+  },
+
+  //上传图片
+  upImage(resolve, reject) {
+    var that = this;
+
+    const filePath = that.data.img_url
+    const cloudPath = that.data.img_name
+    console.log('cloudPath', cloudPath)
+    console.log('filePath', filePath)
+    wx.cloud.uploadFile({
+      cloudPath,
+      filePath,
+      success: res => {
+        console.log('[上传文件] 成功：', res)
+        app.globalData.fileID = res.fileID
+        app.globalData.cloudPath = cloudPath
+        app.globalData.imagePath = filePath
+        resolve(res.fileID)  //promise成功测试
+      },
+      fail: e => {
+        console.error('[上传文件] 失败：', e)
+        wx.showToast({
+          icon: 'none',
+          title: '上传失败',
+        })
+        reject()  //promise失败测试
+      },
+      complete: () => {
+        wx.hideLoading()
+      }
+    })
+  },
+
   onShow: function () {
     // 恢复新建按钮状态
     this.setData({
@@ -232,8 +254,7 @@ Page({
     });
   },
 
-  onHide: function () {
-  },
+  onHide: function () { },
 
   // 初始化设置
   onLoad: function () {
@@ -241,11 +262,11 @@ Page({
     var now = new Date();
     var openId = wx.getStorageSync('openId');
 
-    // 初始化打卡时间
-    that.setData({
-      'task.signTime': util.getHM(now),
-      'task.signEarlyTime': util.getHM(new Date(now.getTime() - 1000 * 3600 * 2))
-    });
+    // // 初始化打卡时间
+    // that.setData({
+    //   'task.signTime': util.getHM(now),
+    //   'task.signEarlyTime': util.getHM(new Date(now.getTime() - 1000 * 3600 * 2))
+    // });
 
     // 初始化日期
     that.setData({
@@ -265,6 +286,5 @@ Page({
         openId: openId
       })
     });
-
-  }
+  },
 })
