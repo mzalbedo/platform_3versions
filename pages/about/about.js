@@ -9,7 +9,6 @@ Page({
     ACL: 0,
     createdAt: "2018-11-11",
     updatedAt: '',
-
     openid: '',
     userInfo: {},
     creating: false,
@@ -36,11 +35,10 @@ Page({
   // 设置物品地点
   chooseLocation: function() {
     var that = this;
-
     wx.chooseLocation({
       success: function(res) {
         that.setData({
-          'address': res.address,
+          'address': res.address
         })
       },
       fail: function() {
@@ -51,7 +49,6 @@ Page({
       }
     })
   },
-
   _getOnQuery(DB, where) {
     return new Promise((resolve, reject) => {
       this._onQuery(DB, where, resolve, reject)
@@ -113,8 +110,6 @@ Page({
     });
 
     this.onAdd();
-
-
     wx.hideToast();
     wx.navigateTo({
       url: '/pages/my/my',
@@ -219,7 +214,7 @@ Page({
       data: {},
       success: res => {
         console.log('[云函数] [login] user openid: ', res.result.openid)
-        // app.globalData.openid = res.result.openid
+         app.globalData.openid = res.result.openid
         this.setData({
           openid: res.result.openid
         })
