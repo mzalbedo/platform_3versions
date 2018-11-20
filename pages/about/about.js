@@ -14,9 +14,14 @@ Page({
     userInfo: {},
     creating: false,
     button: {
-      txt: '新建'
+      txt: '新建',
+      txt1:'更改',
     },
-    modalHidden: true,
+    _id:'',
+    
+    buttontype:false,  //用于更改button上显示的文字
+    modalHidden: true, //用于隐藏button栏不能反复点击
+    updatatype:false, //用于确定数据是否有用户表数据
     show: true
   },
 
@@ -36,10 +41,11 @@ Page({
   // 设置物品地点
   chooseLocation: function() {
     var that = this;
+
     wx.chooseLocation({
       success: function(res) {
         that.setData({
-          'address': res.address
+          'address': res.address,
         })
       },
       fail: function() {
@@ -50,6 +56,7 @@ Page({
       }
     })
   },
+
   _getOnQuery(DB, where) {
     return new Promise((resolve, reject) => {
       this._onQuery(DB, where, resolve, reject)
@@ -61,6 +68,37 @@ Page({
   modalChange: function(e) {
     this.setData({
       modalHidden: true
+    })
+  },
+  //更新用户表数据
+  onCounterInc: function () {
+    const db = wx.cloud.database()
+    
+    db.collection('user_table').doc(this.data._id).update({
+      data: {
+        tel: this.data.tel, //联系方式
+        username: this.data.userInfo.nickName, //昵称
+        address1: this.data.address1, //定位地址
+        address: this.data.address, //详细地址
+        ACL: this.data.ACL, //权限
+       // createdAt: this.data.createdAt, //注册时间
+        updatedAt: this.data.createdAt, //更新时间
+      },
+      success: res => {
+        this.setData({
+          tel: this.data.tel, //联系方式
+          username: this.data.userInfo.nickName, //昵称
+          address1: this.data.address1, //定位地址
+          address: this.data.address, //详细地址
+          ACL: this.data.ACL, //权限
+          // createdAt: this.data.createdAt, //注册时间
+          updatedAt: this.data.createdAt, //更新时间
+        })
+      },
+      fail: err => {
+        icon: 'none',
+          console.error('[数据库] [更新记录] 失败：', err)
+      }
     })
   },
   // add database data
@@ -80,10 +118,13 @@ Page({
       success: res => {
         // 在返回结果中会包含新创建的记录的 _id
         this.setData({
-          counterId: res._id,
-          count: 11324646,
-
-          price: 104569815
+          tel: this.data.tel, //联系方式
+          username: this.data.userInfo.nickName, //昵称
+          address1: this.data.address1, //定位地址
+          address: this.data.address, //详细地址
+          ACL: this.data.ACL, //权限
+          createdAt: this.data.createdAt, //注册时间
+          updatedAt: this.data.updatedAt //更新时间
         })
         wx.showToast({
           title: '新增记录成功',
@@ -109,23 +150,20 @@ Page({
       icon: 'loading',
       duration: 10000
     });
-
-    this.onAdd();
+    //如果没有注册那么会新建 注册了就更新数据
+   if(!this.data.updatatype)
+   {
+     this.onAdd(); 
+   }else
+   {
+     //
+     this.onCounterInc();
+   }
+   console.log("cuntshislntonadiothjsnl-------")
     wx.hideToast();
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/my/my',
-      success: function(res) {
-        // success
-      },
-      fail: function() {
-        // fail
-      },
-      complete: function() {
-        // complete
-      }
     })
-
-
   },
 
   // 提交、检验
@@ -163,17 +201,23 @@ Page({
     wx.showLoading() //加载loading
     var that = this;
     var now = new Date();
-    // var openid = wx.getStorageSync('openid');
-    // that.onGetOpenid()
-    this.setData({
-      openid: getApp().globalData.openid
-    })
-
+    //对获取的openid判断 如何存在就setdata
+    var appopenid =getApp().globalData.openid;
+    console.log("this is opendid"+appopenid)
+    if(appopenid=='')
+    {
+      appopenid="";
+    }else
+    {
+      this.setData({
+        openid: getApp().globalData.openid
+      })
+      wx.hideLoading()
+    }
     const detail = this._getOnQuery('user_table', '')
-
     // 初始化打卡时间
     that.setData({
-      'createdAt': util.getHM(now),
+      'createdAt': util.getYMD(now),
     });
 
     // 初始化昵称
@@ -182,53 +226,49 @@ Page({
       that.setData({
         userInfo: userInfo
       });
-
-      // that.setData({
-      //   openid: openid
-      // })
     });
 
     that._getOnQuery('user_table', '')
       .then(res => {
-        console.log('data:->',this.data)
-        console.log('获取',res[0]._openid)
-        console.log('用户',this.data.openid)
-
-        if (res[0]._openid == this.data.openid) {
-          that.setData({ 
-            tel: res[0].tel,
-            address: res[0].address,
-            address1: res[0].address1,
-            ACL: res[0].ACL,
-            createdAt: res[0].createdAt,
-            updatedAt: res[0].updatedAt
+        
+        if(res=="")
+        {
+          //如果查询不到东西 按键显示字符“新建”
+          this.setData({
+            buttontype:false,
+            updatatype: false, 
+            
           })
+          console.log("please register!!")
         }
-        wx.hideLoading()
+        else{
+          //console.log(res[0]._id)
+          //按键显示字符“新建”
+          this.setData({
+            buttontype: true,
+            updatatype: true, //用于确定数据是否有用户表数据
+            
+          })
+          console.log('data:->', this.data)
+          console.log('获取', res[0]._openid)
+          console.log('用户', this.data.openid)
+
+          if (res[0]._openid == this.data.openid) {
+            that.setData({
+              tel: res[0].tel,
+              address: res[0].address,
+              address1: res[0].address1,
+              ACL: res[0].ACL,
+              _id: res[0]._id,
+              createdAt: res[0].createdAt,
+              updatedAt: res[0].updatedAt
+            })
+          }
+          wx.hideLoading()
+        }
+     
       })
 
-  },
-
-  //获取openid
-  onGetOpenid: function () {
-    // 调用云函数
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
-         app.globalData.openid = res.result.openid
-        this.setData({
-          openid: res.result.openid
-        })
-      },
-      fail: err => {
-        console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
-      }
-    })
   },
 
   observer: function () { 

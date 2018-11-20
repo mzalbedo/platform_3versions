@@ -8,15 +8,13 @@ Page({
   
     img_url:'',
     task: {
-      name: '',
-      price:'',
+      goods_name:'',
       introdution:'',
-      address: '点击选择地点',
-      address1:'',
-      signTime: '00:00',
-      signEarlyTime: '00:00',
-      startDay: '2016-11-00',
-      endDay: '2016-11-00',
+      fileid: '点击选择地点',
+      createdAT:'2016-11-00',
+      updatedAT:'2016-11-00',
+      price:'',
+      ACL:'',
       repeat: {
         'monday': 1,
         'tuesday': 1,
@@ -48,7 +46,7 @@ Page({
   // 设置物品名称
   bindKeyInput: function (e) {
     this.setData({
-      'task.name': e.detail.value
+      'task.goods_name': e.detail.value
     });
   },
   // 设置物品介绍
@@ -57,38 +55,33 @@ Page({
       'task.introdution': e.detail.value
     });
   },
-  bindKeyInput2:function(e)
-  {
-    this.setData({
-      'task.address1': e.detail.value
-    })
-  },
+  //物品价格
   bindKeyInputPrice:function(e)
   {
     this.setData({
       'task.price': e.detail.value
     })
   },
-  // 设置物品地点
-  chooseLocation: function () {
-    var that = this;
+  // // 设置物品地点
+  // chooseLocation: function () {
+  //   var that = this;
 
-    wx.chooseLocation({
-      success: function (res) {
-        that.setData({
-          'task.address': res.address,
-          'task.latitude': res.latitude,
-          'task.longitude': res.longitude
-        })
-      },
-      fail: function () {
-        // fail
-      },
-      complete: function () {
-        // complete
-      }
-    })
-  },
+  //   wx.chooseLocation({
+  //     success: function (res) {
+  //       that.setData({
+  //         'task.address': res.address,
+  //         'task.latitude': res.latitude,
+  //         'task.longitude': res.longitude
+  //       })
+  //     },
+  //     fail: function () {
+  //       // fail
+  //     },
+  //     complete: function () {
+  //       // complete
+  //     }
+  //   })
+  // },
 
   // 设置打卡时间
   setSignTime: function (e) {
@@ -256,8 +249,8 @@ Page({
 
     // 初始化日期
     that.setData({
-      'task.startDay': util.getYMD(now),
-      'task.endDay': util.getYMD(now)
+      'task.createdAT': util.getYMD(now),
+      'task.updatedAT': util.getYMD(now)
     });
 
 

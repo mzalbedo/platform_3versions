@@ -1,8 +1,4 @@
 
-// import{
-//   AV
-// }
-
 import {
   ClassicModel
 } from '../../models/classic.js'
@@ -13,8 +9,6 @@ import {
 import {
   promisic
 } from '../../util/common.js'
-
-
 
 //index.js
 const app = getApp()
@@ -32,19 +26,14 @@ Page({
     userInfo: null,
     bookCount: 0,
     classics: null,
-    todos_user:[],
+    todos_user: [],
   },
 
   onShow(options) {
     this.userAuthorized1()
     this.getMyBookCount()
     this.getMyFavor(this.data.userInfo);
-    //this.addTodo()
-    // wx.getUserInfo({
-    //   success:data=>{
-    //     console.log(data)
-    //   }
-    // })
+
   },
 
   getMyFavor() {
@@ -66,7 +55,7 @@ Page({
   },
 
 
-  
+
   userAuthorized1() {
     promisic(wx.getSetting)()
       .then(data => {
@@ -76,7 +65,7 @@ Page({
         return false
       })
       .then(data => {
-        if (!data) return 
+        if (!data) return
         this.setData({
           authorized: true,
           userInfo: data.userInfo
@@ -84,7 +73,6 @@ Page({
         // console.log(data);
       })
   },
-
 
   userAuthorized() {
     wx.getSetting({
@@ -99,14 +87,12 @@ Page({
               })
               this.addTodo(data);
             }
-           
+
           })
         }
       }
     })
   },
-
-
 
   onGetUserInfo(event) {
     const userInfo = event.detail.userInfo
@@ -115,33 +101,13 @@ Page({
         userInfo,
         authorized: true
       })
-      // new AV.Query(Todo).find().then(todos => this.setData({
-      //   todos
-      // }).catch(console.error),
-      
     }
-
-  
-
-
   },
 
   onJumpToAbout(event) {
-    // 调用云函数
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
-        app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '/pages/about/about',
-        })
-      },
-      fail: err => {
-        console.error('[云函数] [login] 调用失败', err)
-      }
-    })
+    wx.navigateTo({
+      url: '/pages/about/about',
+    }) 
   },
 
   onStudy(event) {
@@ -150,27 +116,11 @@ Page({
     })
   },
 
-  onJumpToDetail(event){
+  onJumpToDetail(event) {
     const cid = event.detail.cid
     const type = event.detail.type
-    // wx.navigateTo
     wx.navigateTo({
-      url:`/pages/classic-detail/classic-detail?cid=${cid}&type=${type}`
+      url: `/pages/classic-detail/classic-detail?cid=${cid}&type=${type}`
     })
   }
-
-
 })
-
-
-
-
-
-
-
-
-
-    // wx.navigateTo({
-    //   url:`/pages/classic-detail/index?cid=${cid}
-    //     &type=${type}`
-    // })

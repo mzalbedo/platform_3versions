@@ -28,6 +28,6 @@
             </block>
         </view>
     </view>
-
 </view>
+<!-- 物品上传 -->
 <image bind:tap="onStudy" class="study" src="/images/my/deliver.png"></image>
