@@ -36,11 +36,10 @@ Page({
   // 设置物品地点
   chooseLocation: function() {
     var that = this;
-
     wx.chooseLocation({
       success: function(res) {
         that.setData({
-          'address': res.address,
+          'address': res.address
         })
       },
       fail: function() {
@@ -51,7 +50,6 @@ Page({
       }
     })
   },
-
   _getOnQuery(DB, where) {
     return new Promise((resolve, reject) => {
       this._onQuery(DB, where, resolve, reject)
@@ -113,8 +111,6 @@ Page({
     });
 
     this.onAdd();
-
-
     wx.hideToast();
     wx.navigateTo({
       url: '/pages/my/my',
@@ -211,6 +207,28 @@ Page({
         wx.hideLoading()
       })
 
+  },
+
+  //获取openid
+  onGetOpenid: function () {
+    // 调用云函数
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        console.log('[云函数] [login] user openid: ', res.result.openid)
+         app.globalData.openid = res.result.openid
+        this.setData({
+          openid: res.result.openid
+        })
+      },
+      fail: err => {
+        console.error('[云函数] [login] 调用失败', err)
+        wx.navigateTo({
+          url: '../deployFunctions/deployFunctions',
+        })
+      }
+    })
   },
 
   observer: function () { 
