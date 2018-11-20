@@ -1,17 +1,13 @@
 <!-- 新建任务 -->
-<view class="add-page">
-
+<view  wx:if="{{show}}" class="add-page">
     <view class="mod-a">
         <!-- 任务名称 -->
         <view class="mod t-name">
             <text class="key">联系电话</text>
-            <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="请输入联系电话" />
+            <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="{{tel}}" />
             <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
         </view>  
-
-
     </view>
-
     <view class="mod-a mt20">
         <!-- 任务地点 -->
         <view class="mod t-address" bindtap="chooseLocation">
@@ -22,20 +18,11 @@
         </view>
       <view class="mod t-address" >
             <text class="key">详情地点</text>
-            <input bindinput="bindKeyInput2" class="value" maxlength="100" placeholder="请输入几号楼" />
+            <input bindinput="bindKeyInput2" class="value" maxlength="100" placeholder="{{}}" />
             <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>
-    
-
-   
-
-      
+        </view> 
 <image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
     </view>
-
-
-
-
     <!-- 我的昵称 -->
     <view class="mod-a mt20">
         <view class="mod my-nick">
@@ -43,15 +30,39 @@
             <text>{{userInfo.nickName}}</text>
         </view>
     </view>
-
     <!-- 创建按钮 -->
     <view class="create">
         <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
-    </view>
-    
+    </view>  
     <!-- 提示信息 -->
     <modal confirm-text="确定"no-confirm  no-cancel hidden="{{modalHidden}}" mask bindconfirm="modalChange">
         请完善新建任务信息
     </modal>
+</view>
 
+<view  wx:if="{{!show}}" class="add-page">
+    <view class="mod-a mt20">
+        <view class="mod my-nick">
+            <text>联系电话</text>
+            <text>{{tel}}</text>
+        </view>
+    </view>
+    <view class="mod-a mt20">
+        <view class="mod my-nick">
+            <text>取件地点</text>
+            <text>{{address}}</text>
+        </view>
+    </view>
+    <view class="mod-a mt20">
+        <view class="mod my-nick">
+            <text>详情地点</text>
+            <text>{{address1}}</text>
+        </view>
+    </view>
+    <view class="mod-a mt20">
+        <view class="mod my-nick">
+            <text>我的昵称</text>
+            <text>{{userInfo.nickName}}</text>
+        </view>
+    </view>
 </view>

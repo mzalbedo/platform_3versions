@@ -79,7 +79,7 @@ Page({
           authorized: true,
           userInfo: data.userInfo
         })
-        console.log(data);
+        // console.log(data);
       })
   },
 

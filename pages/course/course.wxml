@@ -1,95 +1,82 @@
 <!-- 新建任务 -->
 <view class="add-page">
 
-    <view class="mod-a">
-        <!-- 任务名称 -->
-        <view class="mod t-name">
-            <text class="key">物品名称</text>
-            <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="请输入物品名称" />
-            <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>  
-          <!-- 添加价格-->
-        <view class="mod t-name">
-            <text class="key">物品价格</text>
-             <input bindinput="bindKeyInputPrice" class="input" maxlength="100" placeholder="请输入物品价格" />
-            <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>
+  <view class="mod-a">
+    <!-- 任务名称 -->
+    <view class="mod t-name">
+      <text class="key">物品名称</text>
+      <input bindinput="bindKeyInput" class="input" maxlength="100" placeholder="请输入物品名称" />
+      <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
+    </view>
+    <!-- 添加价格-->
+    <view class="mod t-name">
+      <text class="key">物品价格</text>
+      <input bindinput="bindKeyInputPrice" class="input" maxlength="100" placeholder="请输入物品价格" />
+      <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
+    </view>
 
-              <!-- 添加说明 -->
-        <view class="mod t-name">
-            <text class="key">物品介绍</text>
-             <input bindinput="bindKeyInput1" class="input" maxlength="100" placeholder="请输入物品介绍" />
-            <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>
+    <!-- 添加说明 -->
+    <view class="mod t-name">
+      <text class="key">物品介绍</text>
+      <input bindinput="bindKeyInput1" class="input" maxlength="100" placeholder="请输入物品介绍" />
+      <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
+    </view>
+  </view>
+
+  <view class="mod-a mt20">
+    <view class="mod t-early">
+      <text class="key">上传照片</text>
+      <text class="value" bindtap='uploadImg'>点击上传图片</text>
 
     </view>
 
-    <view class="mod-a mt20">
-        <!-- 任务地点 -->
-        <view class="mod t-address" bindtap="chooseLocation">
-            <text class="key">取件地点</text>
-            <text class="value">{{task.address}}</text>
-            <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>
-      <view class="mod t-address" >
-            <text class="key">详情地点</text>
-            <input bindinput="bindKeyInput2" class="value" maxlength="100" placeholder="请输入几号楼" />
-            <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
-        </view>
-    
 
-        <!-- 最早打卡时间 -->
-        <view class="mod t-early" >
-            <text class="key">上传照片</text>
-            <text class="value" bindtap='uploadImg'>点击上传图片</text>
-            
-        </view>
-
-      
-<image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
-    </view>
+    <image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
+  </view>
 
 
   <view class="mod-a mt20">
-        <!-- 起始时间 -->
-        <view class="mod t-time">
-            <view class="start">
-                <text class="key">开始于</text>
-                <picker mode="date" value="{{task.startDay}}" start="{{task.startDay}}" bindchange="startDateChange">
-                    <view class="date">{{task.startDay}}<image class="arrow-d" src="../..//images/new/arrow-d-0.png"></image></view>
-                </picker>
-            </view>
-            <view class="pipe"></view>
-            <view class="end">
-                <text class="key">注意：</text>
-                
-                    <view class="date">一周后自动下架</view>
-                
-            </view>
-        </view>
+    <!-- 起始时间 -->
+    <view class="mod t-time">
+      <view class="start">
+        <text class="key">开始于</text>
+        <picker mode="date" value="{{task.startDay}}" start="{{task.startDay}}" bindchange="startDateChange">
+          <view class="date">{{task.startDay}}
+            <image class="arrow-d" src="../..//images/new/arrow-d-0.png"></image>
+          </view>
+        </picker>
+      </view>
+      <view class="pipe"></view>
+      <view class="end">
+        <text class="key">注意：</text>
 
-       
-       
-         
-        
+        <view class="date">一周后自动下架</view>
+
+      </view>
     </view>
 
-    <!-- 我的昵称 -->
-    <view class="mod-a mt20">
-        <view class="mod my-nick">
-            <text>我的昵称</text>
-            <text>{{userInfo.nickName}}</text>
-        </view>
-    </view>
 
-    <!-- 创建按钮 -->
-    <view class="create">
-        <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
+
+
+
+  </view>
+
+  <!-- 我的昵称 -->
+  <view class="mod-a mt20">
+    <view class="mod my-nick">
+      <text>我的昵称</text>
+      <text>{{userInfo.nickName}}</text>
     </view>
-    
-    <!-- 提示信息 -->
-    <modal confirm-text="确定"no-confirm  no-cancel hidden="{{modalHidden}}" mask bindconfirm="modalChange">
-        请完善新建任务信息
-    </modal>
+  </view>
+
+  <!-- 创建按钮 -->
+  <view class="create">
+    <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
+  </view>
+
+  <!-- 提示信息 -->
+  <modal confirm-text="确定" no-confirm no-cancel hidden="{{modalHidden}}" mask bindconfirm="modalChange">
+    请完善新建任务信息
+  </modal>
 
 </view>
