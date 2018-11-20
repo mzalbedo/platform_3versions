@@ -10,7 +10,7 @@ Page({
     createdAt: "2018-11-11",
     updatedAt: '',
 
-    openid: '',
+    openid: '1',
     userInfo: {},
     creating: false,
     button: {
@@ -158,7 +158,6 @@ Page({
       'creating': false,
     });
     console.log(this.data)
-
   },
 
   onHide: function() {},
@@ -169,7 +168,10 @@ Page({
     var that = this;
     var now = new Date();
     // var openid = wx.getStorageSync('openid');
-    that.onGetOpenid()
+    // that.onGetOpenid()
+    this.setData({
+      openid: getApp().globalData.openid
+    })
 
     const detail = this._getOnQuery('user_table', '')
 
@@ -192,7 +194,7 @@ Page({
 
     that._getOnQuery('user_table', '')
       .then(res => {
-        console.log(res[0])
+        console.log('data:->',this.data)
         console.log('获取',res[0]._openid)
         console.log('用户',this.data.openid)
 
@@ -211,32 +213,9 @@ Page({
 
   },
 
-  //获取openid
-  onGetOpenid: function () {
-    // 调用云函数
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
-        // app.globalData.openid = res.result.openid
-        this.setData({
-          openid: res.result.openid
-        })
-      },
-      fail: err => {
-        console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
-      }
-    })
-  },
-
   observer: function () { 
     ob:true
   },
-
 
   //数据查询
   _onQuery: function(DB, where, resolve, reject) {

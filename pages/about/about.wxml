@@ -18,7 +18,7 @@
         </view>
       <view class="mod t-address" >
             <text class="key">详情地点</text>
-            <input bindinput="bindKeyInput2" class="value" maxlength="100" placeholder="{{}}" />
+            <input bindinput="bindKeyInput2" class="value" maxlength="100" placeholder="{{address1}}" />
             <image class="arrow-r" src="../../images/new/arrow-r-0.png"></image>
         </view> 
 <image class='img' wx:if="{{img_url}}" src='{{img_url}}'></image>
