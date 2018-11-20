@@ -32,7 +32,7 @@
     </view>
     <!-- 创建按钮 -->
     <view class="create">
-        <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{button.txt}}</button>
+        <button class="btn {{creating ? 'disabled' : ''}}" bindtap="bindSubmit">{{buttontype?button.txt1:button.txt}}</button>
     </view>  
     <!-- 提示信息 -->
     <modal confirm-text="确定"no-confirm  no-cancel hidden="{{modalHidden}}" mask bindconfirm="modalChange">

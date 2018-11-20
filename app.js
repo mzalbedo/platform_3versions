@@ -34,20 +34,6 @@ App({
             }
           })
 
-          // // 获取用户openid
-          // wx.request({
-          //   url: 'https://www.cpcsign.com/api/login',
-          //   data: {
-          //     'js_code': r.code
-          //   },
-          //   method: 'GET',
-          //   success: function (res) {
-          //     console.log('---code 换取 openid---');
-          //     wx.setStorageSync('openId', res.data.openid);
-          //   }
-          // })
-
-          
         }
       })
     }
