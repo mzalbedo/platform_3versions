@@ -40,8 +40,8 @@
     <view class="mod t-time">
       <view class="start">
         <text class="key">开始于</text>
-        <picker mode="date" value="{{task.startDay}}" start="{{task.startDay}}" bindchange="startDateChange">
-          <view class="date">{{task.startDay}}
+        <picker mode="date" value="{{task.createdAT}}" start="{{task.createdAT}}" bindchange="startDateChange">
+          <view class="date">{{task.createdAT}}
             <image class="arrow-d" src="../..//images/new/arrow-d-0.png"></image>
           </view>
         </picker>
@@ -54,11 +54,6 @@
 
       </view>
     </view>
-
-
-
-
-
   </view>
 
   <!-- 我的昵称 -->
